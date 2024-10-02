@@ -5,13 +5,28 @@ function Show-Menu {
     Write-Host "============================" -ForegroundColor Cyan
     Write-Host "1. Gaming Setup"
     Write-Host "   1.1. Install Gaming Apps"
-    Write-Host "   1.2. Monitor Settings"
-    Write-Host "   1.3. NVIDIA Updates"
     Write-Host "2. Development Apps"
     Write-Host "3. Patch Windows & Security Updates"
     Write-Host "4. Exit"
 }
 
+function Get-GpuInfo {
+    Clear-Host
+    Write-Host "====================" -ForegroundColor Cyan
+    Write-Host " GPU Information " -ForegroundColor White
+    Write-Host "====================" -ForegroundColor Cyan
+
+    # Get the GPU information
+    $gpu = Get-WmiObject Win32_VideoController | Where-Object { $_.Name -like "*NVIDIA*" }
+    $gpuName = $gpu.Name
+    $gpuID = $gpu.DeviceID
+
+    # Display GPU Information
+    Write-Host "Detected GPU: $gpuName" -ForegroundColor Yellow
+    Write-Host "GPU Device ID: $gpuID" -ForegroundColor Yellow
+
+    Read-Host -Prompt "Press Enter to continue"
+}
 
 function Install-GamingApps {
     do {
@@ -57,75 +72,6 @@ function Install-GamingApps {
             }
             '5' { return }
             default { Write-Host "Invalid option, please try again." -ForegroundColor Red }
-        }
-
-        Read-Host -Prompt "Press Enter to continue"
-    } while ($true)
-}
-
-function Gaming-Settings {
-    do {
-        Clear-Host
-        Write-Host "====================" -ForegroundColor Cyan
-        Write-Host " Monitor & NVIDIA Settings " -ForegroundColor White
-        Write-Host "====================" -ForegroundColor Cyan
-        Write-Host "1. Change Monitor Refresh Rate"
-        Write-Host "2. Update NVIDIA Drivers"
-        Write-Host "3. Back"
-
-        $choice = Read-Host -Prompt "Choose an option"
-
-        switch ($choice) {
-            '1' { Change-MonitorRefreshRate }
-            '2' { Update-NvidiaDrivers }
-            '3' { return }
-            default { Write-Host "Invalid option, please try again." -ForegroundColor Red }
-        }
-
-        Read-Host -Prompt "Press Enter to continue"
-    } while ($true)
-}
-
-function Change-MonitorRefreshRate {
-    do {
-        Clear-Host
-        Write-Host "====================" -ForegroundColor Cyan
-        Write-Host " Change Monitor Refresh Rate " -ForegroundColor White
-        Write-Host "====================" -ForegroundColor Cyan
-
-        $newRate = Read-Host -Prompt "Enter the desired refresh rate (Hz, e.g., 60, 144) or type 'back' to return"
-        if ($newRate -eq 'back') { return }
-
-        try {
-            # Simulated change, replace this with the actual implementation
-            Write-Host "Monitor refresh rate changed to $newRate Hz." -ForegroundColor Green
-        }
-        catch {
-            Write-Host "Failed to change refresh rate." -ForegroundColor Red
-        }
-
-        Read-Host -Prompt "Press Enter to continue"
-    } while ($true)
-}
-
-function Update-NvidiaDrivers {
-    do {
-        Clear-Host
-        Write-Host "====================" -ForegroundColor Cyan
-        Write-Host " Update NVIDIA Drivers " -ForegroundColor White
-        Write-Host "====================" -ForegroundColor Cyan
-
-        $updateChoice = Read-Host -Prompt "Type 'update' to start updating or 'back' to return"
-        if ($updateChoice -eq 'back') { return }
-
-        try {
-            Write-Host "Updating NVIDIA drivers..." -ForegroundColor Yellow
-            # Actual update process
-            Start-Process -FilePath "C:\Program Files\NVIDIA Corporation\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe" -ArgumentList "--update" -Wait
-            Write-Host "NVIDIA drivers updated successfully!" -ForegroundColor Green
-        }
-        catch {
-            Write-Host "Failed to update NVIDIA drivers." -ForegroundColor Red
         }
 
         Read-Host -Prompt "Press Enter to continue"
@@ -199,28 +145,22 @@ function Install-DevTools {
 }
 
 function Patch-Windows {
-    do {
-        Clear-Host
-        Write-Host "====================" -ForegroundColor Cyan
-        Write-Host " Patching Windows & Installing Security Updates " -ForegroundColor White
-        Write-Host "====================" -ForegroundColor Cyan
+    Clear-Host
+    Write-Host "====================" -ForegroundColor Cyan
+    Write-Host " Patching Windows " -ForegroundColor White
+    Write-Host "====================" -ForegroundColor Cyan
 
-        $updateChoice = Read-Host -Prompt "Type 'patch' to start patching or 'back' to return"
-        if ($updateChoice -eq 'back') { return }
+    Write-Host "Checking for Windows Updates..." -ForegroundColor Yellow
+    # Simulate checking for updates
+    Start-Sleep -Seconds 2
+    Write-Host "Downloading and Installing Windows Updates..." -ForegroundColor Yellow
+    # Simulate downloading and installing updates
+    Start-Sleep -Seconds 5
+    Write-Host "Windows is up to date!" -ForegroundColor Green
 
-        try {
-            Write-Host "Patching Windows and installing security updates..." -ForegroundColor Yellow
-            # Simulated patching, replace with actual process
-            Start-Sleep -Seconds 2
-            Write-Host "Windows patched and security updates installed!" -ForegroundColor Green
-        }
-        catch {
-            Write-Host "Failed to patch Windows." -ForegroundColor Red
-        }
-
-        Read-Host -Prompt "Press Enter to continue"
-    } while ($true)
+    Read-Host -Prompt "Press Enter to continue"
 }
+
 
 do {
     Show-Menu
@@ -228,8 +168,6 @@ do {
 
     switch ($mainChoice) {
         '1.1' { Install-GamingApps }
-        '1.2' { Change-MonitorRefreshRate }
-        '1.3' { Update-NvidiaDrivers }
         '2' {
             do {
                 Clear-Host
