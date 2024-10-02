@@ -27,9 +27,6 @@ Utility is a personal project designed to streamline the setup and maintenance o
 - Administrative privileges for certain operations
 - Internet connection for downloading updates and applications
 `
-## Screenshots
-
-![Utility Main Menu](path/to/your/image.png)
 
 ## Contributing
 
