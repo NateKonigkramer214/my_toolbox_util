@@ -24,7 +24,7 @@ ${blue}                                         |___/
     Write-Host "=======================================================" -ForegroundColor Cyan
     Write-Host "1. Gaming Setup" -ForegroundColor Green
     Write-Host "   1.1. Install Gaming Apps" -ForegroundColor Yellow
-    Write-Host "   1.2. Display GPU Info" -ForegroundColor Yellow
+    Write-Host "   1.2. Display System Info" -ForegroundColor Yellow
     Write-Host "2. Development Apps" -ForegroundColor Green
     Write-Host "3. Patch Windows & Security Updates" -ForegroundColor Green
     Write-Host "4. Exit" -ForegroundColor Red
@@ -40,7 +40,7 @@ do {
 
     switch ($mainChoice) {
         '1.1' { Install-GamingApps }
-        '1.2' { Get-GpuInfo }
+        '1.2' { Get-SystemInfo }
         '2' {
             do {
                 Clear-Host

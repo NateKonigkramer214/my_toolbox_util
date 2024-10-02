@@ -1,9 +1,35 @@
 function Patch-Windows {
+    # Function to restart the script with elevated privileges
+    function Start-ProcessAsAdmin {
+        $scriptPath = $MyInvocation.MyCommand.Path
+        Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`"" -Verb RunAs
+        exit
+    }
+
+    # Check if the script is running with administrative privileges
+    if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent().IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) {
+        Write-Host "This script requires administrative privileges. Restarting with admin rights..." -ForegroundColor Yellow
+        Start-ProcessAsAdmin
+    }
+
+    # Check if PSWindowsUpdate module is installed
+    if (-not (Get-Module -ListAvailable -Name PSWindowsUpdate)) {
+        Write-Host "PSWindowsUpdate module is not installed. Installing now..." -ForegroundColor Yellow
+        try {
+            Install-Module PSWindowsUpdate -Force -Scope CurrentUser
+            Write-Host "PSWindowsUpdate module installed successfully!" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "Failed to install PSWindowsUpdate module. Error: $_" -ForegroundColor Red
+            return
+        }
+    }
+
     do {
         Clear-Host
-        Write-Host "====================" -ForegroundColor Cyan
+        Write-Host "========================================" -ForegroundColor Cyan
         Write-Host " Patching Windows & Installing Security Updates " -ForegroundColor White
-        Write-Host "====================" -ForegroundColor Cyan
+        Write-Host "========================================" -ForegroundColor Cyan
 
         $updateChoice = Read-Host -Prompt "Type 'scan' to run a security scan, 'patch' to start patching, or 'back' to return"
         if ($updateChoice -eq 'back') { return }
@@ -59,3 +85,5 @@ function Patch-Windows {
         Read-Host -Prompt "Press Enter to continue"
     } while ($true)
 }
+
+# Ensure this is sourced in your scripts where needed
